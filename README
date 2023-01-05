@@ -1,0 +1,95 @@
+Build and Run instructions.
+
+##################################
+qtsimpelbrowser build instructions
+##################################
+
+qtsimplebrowser is single window browser which is based on QtWebKit.
+qtsimplebrowser has additional browser options similar to QtTestBrowser.
+Compare to QtTestBrowser it has much better performance suitable for
+embedded systems. The list of supported options is located at the end of
+this section.
+
+Steps to build qtsimplebrowser:
+
+1. Define environment variable with path to QtWebKit ROOT_WEBKIT_DIR:
+
+   export ROOT_WEBKIT_DIR=<your Qt installation folder>/qtwebkit
+
+2. Go to qtsimplebrowser folder. Run qmake
+
+3. Run make.
+
+4. In order to use https connection set correct date/time on
+   embedded system:
+
+   date -s "Y-m-d H:M:S"
+
+5. While using extra options for qtsimplebrowser make sure to place extra parameters
+   before the URL link (URL link should be the last parameter).
+
+6. Make sure to place complex URLs inside the quotes "".
+
+7. List of supported options (many are similar to QtTestBrowser).
+   All options are disabled by default (if applicable).
+
+   -help
+   -graphicsbased
+   -no-compositing
+   -gl-viewport
+   -webgl
+   -viewport-update-mode [Full|Minimal|Smart|No|BoundingRect] - default is Minimal
+   -user-agent
+   -disk-cache
+   -cache-webview
+   -maximize
+   -show-fps
+   -inspector-url location
+   -tiled-backing-store
+   -resizes-to-contents
+   -local-storage-enabled
+   -no-disk-cookies
+   -offline-storage-database-enabled
+   -offline-web-application-cache-enabled
+   -set-offline-storage-default-quota maxSize
+   -mouse-context-menu
+   -js-console-message
+   URL
+
+
+#################################
+qtsimpelbrowser run instructions
+#################################
+
+To run application we need nxserver running in the background on target
+(either by itself or by running Trellis front-end).
+
+If target folder /usr/local/bin/qt/qt-apps doesn't exist then consider to create it
+on the host system and then mount qt-apps folder to target /usr/local/bin/qt/qt-apps.
+
+To run qtsimplebrowser:
+
+0. In order to use https connection set correct date/time on target system:
+
+   date -s "Y-m-d H:M:S"
+
+1. Set environment variables on target:
+    export QT_QPA_EGLFS_DEPTH=32
+    export FONTCONFIG_FILE=/usr/local/etc/fonts.conf
+    export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/local/bin/qt/plugins/
+    export QML2_IMPORT_PATH=/usr/local/bin/qt/qml
+    export LD_LIBRARY_PATH=/usr/local/lib
+
+2. And run the app:
+
+    ./qtsimplebrowser -platform eglfs -plugin EvdevMouse:/dev/event0 -plugin EvdevKeyboard:/dev/event1 "http://www.videojs.com"
+
+or with options:
+
+    ./qtsimplebrowser -platform eglfs -plugin EvdevMouse:/dev/event0 -plugin EvdevKeyboard:/dev/event1 -graphicsbased "http://www.videojs.com"
+
+
+Or run the app use the start script:
+
+    ./start_qtsimplebrowser.sh [options]
+
